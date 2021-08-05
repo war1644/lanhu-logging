@@ -1,56 +1,57 @@
 package logger_test
 
 import (
-	"fmt"
 	"lanhu-logging/logger"
 	"sync"
-	"time"
 
 	. "github.com/onsi/ginkgo"
 )
 
 var _ = Describe("Logger", func() {
-	Context("each log level output", func() {
+	Context("set log level", func() {
 		It("should be succeed", func() {
-			for level := logger.DEBUG; level <= logger.ERROR; level++ {
-				fmt.Printf("--log level:%d\n", level)
-				logger.SetLogLevel(level)
-				logger.Debug("This is debug", logger.DEBUG)
-				logger.Debugf("this is debug, level:%d", logger.DEBUG)
+			logger.SetLevel("debug")
+			logger.Debug("this is debug")
+			logger.Info("this is info")
 
-				logger.Info("this is info", logger.INFO)
-				logger.Infof("this is info, level:%d", logger.INFO)
+			logger.SetLevel("info")
+			logger.Debug("this is debug")
+		})
+	})
 
-				logger.Warn("this is warn", logger.WARN)
-				logger.Warnf("this is warn, level:%d", logger.WARN)
+	Context("set project", func() {
+		It("should be succeed", func() {
+			logger.SetProjectName("TS")
+			logger.Debug("this is debug")
+		})
+	})
 
-				logger.Error("this is error", logger.ERROR)
-				logger.Errorf("this is error, level:%d", logger.ERROR)
-
-				logger.Infof("/api/ws_main/login. timeSpent:%d", 10)
-			}
+	Context("set src folder", func() {
+		It("should be succeed", func() {
+			logger.SetSrcFolder("lanhu-logging")
+			logger.Debug("this is test")
 		})
 	})
 
 	Context("concurrence", func() {
 		It("should be succeed", func() {
 			wg := sync.WaitGroup{}
+			wg.Add(2)
 			go func() {
-				wg.Add(1)
-				for i := 0; i < 100; i++ {
+				for i := 0; i < 200; i++ {
 					logger.Infof("a hello %d", i)
 				}
+				wg.Done()
 			}()
 
 			go func() {
-				wg.Add(1)
-				for i := 0; i < 100; i++ {
+				for i := 0; i < 200; i++ {
 					logger.Infof("b hello %d", i)
 				}
+				wg.Done()
 			}()
 
 			wg.Wait()
-			time.Sleep(10 * time.Second)
 		})
 	})
 })

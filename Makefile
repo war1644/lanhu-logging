@@ -1,7 +1,6 @@
-.PHONY: dev local pre-install test cover cover-html cover-func clean
+.PHONY: pre-install test
 
 pre-install:
-	go get -u github.com/gin-gonic/gin && \
 	go get -u github.com/onsi/ginkgo/ginkgo
 
 # 执行单元测试
