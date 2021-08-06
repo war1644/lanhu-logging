@@ -135,15 +135,7 @@ func formatHeader(level int, data string) string {
 
 	// 过早获取时间戳，会导致与log写入间隔拉长，可能会出现log不按时间戳顺序显示（毫秒级）
 	header.WriteString(fmt.Sprintf("%s.%03d", time.Now().Format("2006/01/02-15:04:05"), time.Now().Nanosecond()/1e6))
-	header.WriteString(" ")
-	header.WriteString(projectName)
-	header.WriteString(" ")
-	header.WriteString(file)
-	header.WriteString(":")
-	header.WriteString(strconv.Itoa(line))
-	header.WriteString(" ")
-	header.WriteString(levelName[level])
-	header.WriteString(" ")
+	header.WriteString(fmt.Sprintf(" %s %s:%s %s$ ", projectName, file, strconv.Itoa(line), levelName[level]))
 	header.WriteString(data)
 	return header.String()
 }

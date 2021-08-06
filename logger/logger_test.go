@@ -16,6 +16,8 @@ var _ = Describe("Logger", func() {
 
 			logger.SetLevel("info")
 			logger.Debug("this is debug")
+
+			logger.Error("this is test error")
 		})
 	})
 
